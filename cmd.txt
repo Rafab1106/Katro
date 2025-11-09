@@ -1,0 +1,4 @@
+compile:javac --module-path "C:\javafx-sdk-17.0.16\lib" --add-modules javafx.controls,javafx.fxml src\mainty\*.java -d out
+execute:java --module-path "C:\javafx-sdk-17.0.16\lib" --add-modules javafx.controls,javafx.fxml -cp out mainty.Main
+
+rec-2025 1031-00661
