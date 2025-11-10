@@ -1,6 +1,7 @@
 package mainty;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import jeu.Joueur;
 import jeu.Regle;
@@ -19,35 +21,41 @@ public class Main extends Application {
     double x = 50, y = 50, speedX = 2, speedY = 2;
     int li, co;
     Joueur j = new Joueur(16, true, null);
+    Joueur j2 = new Joueur(16, true, null);
 
     @Override
     public void start(Stage stage) {
-        GridPane grille = new GridPane();
-        grille.setHgap(10);
-        grille.setVgap(10);
-        grille.setLayoutX(50);
-        grille.setLayoutY(60);
 
-        afficherCases(grille, j);
+        GridPane grilleJ1 = new GridPane();
+        grilleJ1.setHgap(10);
+        grilleJ1.setVgap(10);
+        grilleJ1.setStyle("-fx-background-color: #cce5ff; -fx-padding: 10; -fx-border-color: #004085; -fx-border-width: 2;");
+
+        GridPane grilleJ2 = new GridPane();
+        grilleJ2.setHgap(10);
+        grilleJ2.setVgap(10);
+        grilleJ2.setStyle("-fx-background-color: #f8d7da; -fx-padding: 10; -fx-border-color: #721c24; -fx-border-width: 2;");
+
+        afficherCases(grilleJ1, j);
+        afficherCases(grilleJ2, j2);
 
         Button btn = new Button("Jouer");
-        btn.setLayoutX(150);
-        btn.setLayoutY(10);
 
         btn.setOnAction(event -> {
             j = Regle.getCase(j, li, co);
-            Regle.chooseDirection(j);
-            afficherCases(grille, j);
+            Regle.chooseDirection(j, j2);
+            afficherCases(grilleJ1, j);
+            afficherCases(grilleJ2, j2);
         });
 
-        Pane root = new Pane();
-        root.getChildren().addAll(grille, btn);
+        VBox layout = new VBox(20); // <-- ESPACE ENTRE LES GRILLES (20 px)
+        layout.setPadding(new Insets(15, 15, 15, 15));
+        layout.getChildren().addAll(btn, grilleJ1, grilleJ2);
 
-        Scene scene = new Scene(root, 400, 300);
+        Scene scene = new Scene(layout, 400, 350);
         stage.setScene(scene);
         stage.show();
     }
-
 
     private void afficherCases(GridPane grille, Joueur j) {
         grille.getChildren().clear();
@@ -57,10 +65,10 @@ public class Main extends Application {
         for (int ligne = 0; ligne < 2; ligne++) {
             for (int col = 0; col < 4; col++) {
 
-                final int l = ligne; // copie finale
-                final int c = col;   // copie finale
+                final int l = ligne;
+                final int c = col;
 
-                String valeur = String.valueOf(cases[ligne][col]);
+                String valeur = String.valueOf(cases[l][c]);
 
                 Button btnCase = new Button(valeur);
                 btnCase.setPrefWidth(50);
@@ -71,18 +79,12 @@ public class Main extends Application {
                     System.out.println("Case (" + l + "," + c + ") cliquée");
                     li = l;
                     co = c;
-                    // this.j = Regle.getCase(this.j, l, c);
-                    // Regle.chooseDirection(this.j);
-                    // afficherCases(grille, this.j);
                 });
 
-                grille.add(btnCase, col, ligne);
+                grille.add(btnCase, c, l);
             }
         }
     }
-
-
-
 
     // @Override
     // public void start(Stage stage) {
