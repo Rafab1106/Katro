@@ -16,7 +16,7 @@ public class Regle {
     /** 
       * apres avoir reçu les jetons on doit maintenant attribuet le sens du mouvement 
     */
-    public static void chooseDirection(Joueur j) {
+    public static void chooseDirection(Joueur j,Joueur j2) {
         int[][] actu = j.getCases();
         // retour
         int[] result = new int[2];
@@ -67,11 +67,35 @@ public class Regle {
             // mbola afaka manohy izy eto
             if (actu[ligne][col] > 1) {
                 System.out.println("Mbola afaka mihetsika");
-                j = Regle.getCase(j,ligne,col);
-                Regle.chooseDirection(j);
+                // j = Regle.getCase(j,ligne,col);
+                j = Regle.minana(j,j2,ligne,col);
+                Regle.chooseDirection(j,j2);
             }
         }
 
+    }
+
+    /**
+     * maka anle premiere ligne meme col anle joueur hafa
+     * @param j2
+     * @param ligne
+     * @param col
+     */
+    private static Joueur minana(Joueur j1,Joueur j2,int ligne,int col){
+        Map<String,Integer> map = new HashMap<String,Integer>();
+        map.put("ligne", ligne);
+        map.put("col", col);
+        j1.setMap(map);
+        // ra oatra ka ts misy eo amle ligne volo zay vao mijery anle ligne manaraka
+        int enMain = j1.getCases()[ligne][col];
+        if (ligne == 0) {
+            enMain = j1.getCases()[ligne][col]+j2.getCases()[0][col];
+            j2.getCases()[0][col] = 0;
+        }
+        j1.setEnMain(enMain);
+
+        j1.getCases()[ligne][col] = 0;
+        return j1;
     }
 
     /**
